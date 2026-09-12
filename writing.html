@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Written Solo — Pocket Ghost</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --paper: #F5F0E6;
+    --ink: #1A1A1A;
+    --charcoal: #2B2E28;
+    --amber: #C77B3F;
+    --moss: #3D4A3E;
+    --mirror: #7A8B99;
+    --line: rgba(26,26,26,0.14);
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, .display {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+
+  a { color: inherit; }
+
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* ---------- Ghost mark ---------- */
+  .ghost-mark {
+    width: 34px;
+    height: 34px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  /* ---------- Header ---------- */
+  header {
+    padding: 28px 0 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 20px;
+  }
+  .wordmark {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 19px;
+    font-weight: 600;
+  }
+  nav {
+    display: flex;
+    gap: 22px;
+    font-size: 15px;
+  }
+  nav a { text-decoration: none; opacity: 0.7; }
+  nav a:hover { opacity: 1; }
+  nav a.current { opacity: 1; border-bottom: 1px solid var(--ink); }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    padding: 72px 0 56px;
+  }
+  .hero .eyebrow-note {
+    font-size: 15px;
+    color: var(--moss);
+    margin-bottom: 18px;
+    max-width: 46ch;
+  }
+  .hero h1 {
+    font-size: clamp(2.1rem, 5vw, 3.1rem);
+    line-height: 1.08;
+    max-width: 14ch;
+  }
+  .hero .sub {
+    margin-top: 22px;
+    max-width: 54ch;
+    font-size: 18px;
+    color: var(--charcoal);
+  }
+  .hero .provenance-note {
+    margin-top: 26px;
+    padding: 16px 18px;
+    background: rgba(122,139,153,0.12);
+    border-left: 3px solid var(--mirror);
+    font-size: 15px;
+    max-width: 54ch;
+  }
+
+  /* ---------- Section shell ---------- */
+  section {
+    padding: 56px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  section:last-of-type { border-bottom: none; }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 8px;
+  }
+  .section-head h2 {
+    font-size: 1.5rem;
+  }
+  .section-num {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    color: var(--accent, var(--moss));
+    font-size: 1.1rem;
+  }
+  .section-desc {
+    max-width: 56ch;
+    color: var(--charcoal);
+    margin-bottom: 32px;
+    font-size: 16px;
+  }
+
+  /* ---------- Track listing (solo written) ---------- */
+  .track {
+    display: grid;
+    grid-template-columns: 2ch 1fr auto;
+    gap: 18px;
+    align-items: start;
+    padding: 20px 0;
+    border-top: 1px solid var(--line);
+  }
+  .track:first-of-type { border-top: none; }
+  .track-idx {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    color: var(--accent, var(--amber));
+    font-size: 15px;
+    padding-top: 2px;
+  }
+  .track-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.15rem;
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+  .track-title a, .diff-title a, .piece-title a {
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    transition: border-color 0.15s;
+  }
+  .track-title a:hover, .diff-title a:hover, .piece-title a:hover {
+    border-color: var(--ink);
+  }
+  .track-tag {
+    font-size: 14.5px;
+    color: var(--charcoal);
+    line-height: 1.55;
+  }
+  .track-genre {
+    font-size: 13px;
+    color: var(--accent, var(--moss));
+    white-space: nowrap;
+    padding-top: 3px;
+    text-align: right;
+  }
+
+  /* ---------- Before / After ---------- */
+  .diff-card {
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 24px;
+    margin-bottom: 22px;
+    background: rgba(255,255,255,0.35);
+  }
+  .diff-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+  }
+  .diff-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.1rem;
+  }
+  .diff-skill {
+    font-size: 13px;
+    color: var(--accent, var(--amber));
+  }
+  .diff-note {
+    font-size: 15px;
+    color: var(--charcoal);
+    margin: 10px 0 16px;
+  }
+  .diff-lines { display: grid; gap: 8px; }
+  .diff-line {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    font-size: 14.5px;
+    padding: 10px 0;
+    border-top: 1px dashed var(--line);
+  }
+  .diff-line:first-child { border-top: none; }
+  .diff-before { color: #8a7a6a; text-decoration: line-through; text-decoration-color: rgba(199,123,63,0.5); }
+  .diff-after { color: var(--ink); font-weight: 500; }
+  .diff-label {
+    font-size: 11px;
+    text-transform: lowercase;
+    color: var(--charcoal);
+    opacity: 0.55;
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  /* ---------- Channel band ---------- */
+  .channel-band {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    padding: 30px;
+    background: var(--charcoal);
+    color: var(--paper);
+    border-radius: 4px;
+  }
+  .channel-band .ghost-mark path { fill: var(--paper); }
+  .channel-stats {
+    font-family: 'Fraunces', serif;
+    font-size: 2rem;
+    line-height: 1;
+  }
+  .channel-stats span {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    opacity: 0.65;
+    margin-top: 4px;
+  }
+  .channel-copy { flex: 1; font-size: 15px; opacity: 0.9; }
+  .channel-link {
+    text-decoration: none;
+    border: 1px solid rgba(245,240,230,0.4);
+    padding: 9px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  .channel-link:hover { background: rgba(245,240,230,0.1); }
+
+  .genre-tags {
+    margin-top: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .genre-tag {
+    font-size: 12.5px;
+    padding: 5px 11px;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    color: var(--charcoal);
+  }
+
+  /* ---------- Footer ---------- */
+  footer {
+    padding: 40px 0 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    color: var(--charcoal);
+  }
+  footer .ghost-mark { width: 22px; height: 22px; opacity: 0.5; }
+
+  @media (max-width: 600px) {
+    .track { grid-template-columns: 1.5ch 1fr; }
+    .track-genre { grid-column: 2; text-align: left; padding-top: 0; }
+    .diff-line { grid-template-columns: 1fr; gap: 4px; }
+    .channel-band { flex-direction: column; align-items: flex-start; }
+  }
+
+/* ---------- Subpage additions ---------- */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--charcoal);
+  text-decoration: none;
+  margin-bottom: 8px;
+}
+.back-link:hover { color: var(--ink); }
+
+.page-hero {
+  padding: 44px 0 40px;
+}
+.page-hero h1 {
+  font-size: clamp(1.8rem, 4.5vw, 2.4rem);
+  margin-top: 10px;
+}
+.page-hero .sub {
+  margin-top: 16px;
+  max-width: 58ch;
+  font-size: 17px;
+  color: var(--charcoal);
+}
+
+.piece {
+  padding: 48px 0;
+  border-top: 1px solid var(--line);
+}
+.piece:first-of-type { border-top: none; padding-top: 8px; }
+
+.piece-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.piece-title {
+  font-family: 'Fraunces', serif;
+  font-size: 1.5rem;
+}
+.piece-genre {
+  font-size: 13px;
+  color: var(--accent, var(--amber));
+}
+.piece-note {
+  font-size: 15.5px;
+  color: var(--charcoal);
+  max-width: 60ch;
+  margin: 10px 0 26px;
+}
+
+.lyrics {
+  white-space: pre-line;
+  font-family: 'Fraunces', serif;
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--ink);
+  max-width: 56ch;
+}
+.lyrics .section-tag {
+  font-family: 'Inter', sans-serif;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--accent, var(--moss));
+  opacity: 0.75;
+  display: block;
+  margin: 22px 0 4px;
+}
+.lyrics .section-tag:first-child { margin-top: 0; }
+
+/* full before/after comparison layout */
+.compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  align-items: start;
+}
+.compare-col-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--charcoal);
+  opacity: 0.6;
+  margin-bottom: 10px;
+  display: block;
+}
+.compare .lyrics { font-size: 15px; }
+.compare-before .lyrics { color: #8a7a6a; }
+
+@media (max-width: 700px) {
+  .compare { grid-template-columns: 1fr; }
+}
+
+
+.listen-link {
+  font-size: 13px;
+  color: var(--accent, var(--amber));
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  white-space: nowrap;
+}
+.listen-link:hover { opacity: 0.7; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap header-row">
+    <a href="index.html" class="wordmark" style="text-decoration:none; color:inherit;">
+      <svg class="ghost-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 4C11.7 4 5 10.7 5 19v14.5c0 .9 1 1.4 1.7.8l2.6-2.3c.5-.4 1.2-.4 1.6.1l2.3 2.5c.4.5 1.2.5 1.6 0l2.3-2.5c.5-.5 1.2-.5 1.6 0l2.3 2.5c.4.5 1.2.5 1.6 0l2.3-2.5c.4-.5 1.1-.5 1.6-.1l2.6 2.3c.7.6 1.7.1 1.7-.8V19c0-8.3-6.7-15-15-15Z" fill="#1A1A1A"/>
+        <ellipse cx="15" cy="18" rx="1.8" ry="2.4" fill="#F5F0E6"/>
+        <ellipse cx="25" cy="18" rx="1.8" ry="2.4" fill="#F5F0E6"/>
+      </svg>
+      Pocket Ghost
+    </a>
+    <nav>
+      <a href="writing.html" class="current">Writing</a>
+      <a href="editing.html">Editing</a>
+      <a href="http://www.youtube.com/@PocketGhostMusic" target="_blank">Channel</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="page-hero">
+    <a class="back-link" href="index.html">← back</a>
+    <h1>Written solo</h1>
+    <p class="sub">Concept, structure, and every line — no generated draft involved. Five pieces, five different jobs: a love song, a narrative ballad, a satire, a structural device, and a chant.</p>
+  </div>
+
+  <div class="piece" id="next-to-me" style="--accent: var(--amber)">
+    <div class="piece-head">
+      <div class="piece-title">Next to Me</div>
+      <div style="display:flex; align-items:center; gap:14px;">
+        <div class="piece-genre">jazz pop · swing · alt R&amp;B</div>
+        <a class="listen-link" href="https://youtu.be/G6li3Mjb3Dg?si=slbd4SLYXpSVkOw3" target="_blank">Listen ↗</a>
+      </div>
+    </div>
+    <p class="piece-note">A plain, unguarded love song — no invented character, no genre bit, just true. The device: the chorus repeats near verbatim, but one word changes each time — <em>eyes → hands → lips</em> — tracking physical intimacy deepening without ever stating it outright.</p>
+    <div class="lyrics">
+<span class="section-tag">Verse 1</span>
+I thought love was done with me
+That I'd never find someone who made me feel
+The way I feel around him
+I moved so fast I almost scared him away
+I'm glad he came back though
+I'm glad he stayed
+
+<span class="section-tag">Chorus</span>
+I sleep better when he's next to me.
+It's never been this easy, being loved.
+I don't care about the words.
+His eyes tell me everything I need to know.
+
+<span class="section-tag">Verse 2</span>
+I love it when he's shy
+And when he tells me about his day
+I love walking by his side and he holds on tight
+He won't say he wants to dance
+But he'll make me turn in the middle of the street
+I shake my head but one kiss makes me smile again
+
+<span class="section-tag">Chorus</span>
+I sleep better when he's next to me.
+It's never been this easy, being loved.
+I don't care about the words.
+His hands tell me everything I need to know.
+
+<span class="section-tag">Verse 3</span>
+It's late and time to go home
+But he does his best to stay awake
+And his arms get tighter around my waist
+I'll catch him staring and I ask him why
+He says it's nothing and smiles
+because we both know what this is
+
+<span class="section-tag">Chorus</span>
+I sleep better when he's next to me.
+It's never been this easy, being loved.
+I don't care about the words.
+His lips tell me everything I need to know.
+
+<span class="section-tag">Final verse</span>
+It's still too early to tell
+But I have a feeling we won't say goodbye
+For a very, very long time
+    </div>
+  </div>
+
+  <div class="piece" id="story-of-a-knight" style="--accent: var(--amber)">
+    <div class="piece-head">
+      <div class="piece-title">The Story of a Knight</div>
+      <div style="display:flex; align-items:center; gap:14px;">
+        <div class="piece-genre">medieval folk ballad</div>
+        <a class="listen-link" href="https://youtu.be/Q6YbKCxf3C8?si=9zQh66X75opTCKfk" target="_blank">Listen ↗</a>
+      </div>
+    </div>
+    <p class="piece-note">Written in about thirty minutes — a narrative ballad about a knight who gives up his one chance at glory to save strangers. A frame device bookends the story: it opens "let me tell you about a knight" and closes "let me tell you about a king," the twist held back until the final line.</p>
+    <div class="lyrics">
+<span class="section-tag">Verse 1</span>
+Gather round, folks, gather round
+And let me tell you about a knight
+He who lost his life in battle but
+Whose soul still sought great glory
+
+He rose up from his grave and
+Walked west a hundred miles
+Where the scarlet mountain stood
+Filled with ghosts from every land
+
+<span class="section-tag">Verse 2</span>
+The one who killed the most, they said,
+And climbed up to the top
+Would become the demon king
+And rule the underworld
+
+The brave knight moved with speed
+Up the mountain step by step
+Leaving ghosts and demons dead
+In a trail under his feet
+
+<span class="section-tag">Verse 3</span>
+But near the top the knight encountered
+A pure crowd of living souls
+Who were stranded in a cave
+And were shivering with fear
+
+Men and women, children and the old
+The knight knew that their end was nigh
+But the heart that had stopped beating
+Never once had lost its warmth
+
+<span class="section-tag">Verse 4</span>
+He sheathed his sword aside
+And reached towards his face
+And in one swift movement
+He removed his own left eye
+"Here's my offering," said the knight
+To the fire-breathing mountain
+"Let these good people go,
+And let me rule your evil world."
+
+<span class="section-tag">Verse 5</span>
+The mountain shook and trembled
+And the top began to open
+To free the innocent
+And for the Demon King to rise
+
+<span class="section-tag">Final verse</span>
+So, gather round, folks, gather round
+And let me tell you about a king
+He who saved the lives of many
+And lays ghosts and demons to waste.
+    </div>
+  </div>
+
+  <div class="piece" id="work" style="--accent: var(--amber)">
+    <div class="piece-head">
+      <div class="piece-title">Work</div>
+      <div style="display:flex; align-items:center; gap:14px;">
+        <div class="piece-genre">hypnotic industrial techno</div>
+        <a class="listen-link" href="https://youtu.be/96vLIR1lxHE?si=XonTVwuWpJnEQHMv" target="_blank">Listen ↗</a>
+      </div>
+    </div>
+    <p class="piece-note">A satirical hustle-culture anthem, built as a self-interrogation. A monotone voice (recorded as the writer's own) asks a series of flat questions in call-and-response, escalating toward the one moment the deadpan breaks.</p>
+    <div class="lyrics">
+<span class="section-tag">Intro</span>
+Pocket Ghost
+
+<span class="section-tag">Verse 1</span>
+Getting crushed like canned sardines? Check!
+Daydreaming at my desk? Yes!
+Working for the gains? Yes!
+But does it ever end? No?
+Fuck!
+
+<span class="section-tag">Chorus</span>
+Work Work Work Work
+Work Work Work Work
+
+Work Work Work Work
+Work Work Work Work
+
+<span class="section-tag">Instrumental break</span>
+
+<span class="section-tag">Verse 2</span>
+Pushing through incompetence? Check!
+Meetings meaningless? Yes!
+Too tired to see friends? Yes!
+And coffee doesn't work? No?
+Fuck!
+
+<span class="section-tag">Chorus</span>
+Work Work Work Work
+Work Work Work Work
+
+Work Work Work Work
+Work Work Work Work
+
+<span class="section-tag">Instrumental break</span>
+
+<span class="section-tag">Chorus</span>
+Work Work Work Work
+Work Work Work Work
+
+Work Work Work Work
+Work Work Work Work
+
+<span class="section-tag">Instrumental outro</span>
+    </div>
+  </div>
+
+  <div class="piece" id="i-know-i-know" style="--accent: var(--amber)">
+    <div class="piece-head">
+      <div class="piece-title">I Know I Know</div>
+      <div style="display:flex; align-items:center; gap:14px;">
+        <div class="piece-genre">city pop · tropicália</div>
+        <a class="listen-link" href="https://youtu.be/Dh8r_hIboE0?si=zTv7VV80gSjXCac4" target="_blank">Listen ↗</a>
+      </div>
+    </div>
+    <p class="piece-note">A heartbreak song built on a wordplay scaffold — <em>I know / you know / who knows / but [X]</em> — repeated three times with only the final line changing: <em>Maybe → Waiting → Goodbye</em>, quietly tracking the emotional arc underneath a near-identical chorus.</p>
+    <div class="lyrics">
+<span class="section-tag">Chorus</span>
+I know I know I know I know
+You didn't mean to hurt me
+You know You know You know You know
+How much you meant to me
+Who knows Who knows Who knows Who knows
+If you'll ever change your mind
+But Maybe Maybe Maybe Maybe
+Means nothing anymore
+
+<span class="section-tag">Instrumental bridge</span>
+
+<span class="section-tag">Verse 1</span>
+It's only been you
+Since the day we met
+I didn't care what I had to carry
+All I wanted was you
+
+Whispered secrets in bed
+My toothbrush at your place
+Your favorite cake on your birthday
+Did you ever feel what I felt?
+
+<span class="section-tag">Chorus</span>
+I know I know I know I know
+You didn't mean to hurt me
+You know You know You know You know
+How much you meant to me
+Who knows Who knows Who knows Who knows
+If you will ever come back
+But Waiting Waiting Waiting Waiting
+I can't do that anymore
+
+<span class="section-tag">Instrumental bridge</span>
+
+<span class="section-tag">Verse 2</span>
+Please be careful
+My friends said from the start
+I promise he's the one
+Was my response each time
+
+Falling sleep in your arms
+Slow mornings and quiet rain
+Your favorite brunch place on Sundays
+Did it mean nothing in the end?
+
+<span class="section-tag">Chorus</span>
+I know I know I know I know
+You didn't mean to hurt me
+You know You know You know You know
+How much you meant to me
+Who knows Who knows Who knows Who knows
+When I'll stop thinking about you
+But Goodbye Goodbye Goodbye Goodbye
+Is all I have left to say
+
+<span class="section-tag">Instrumental outro</span>
+    </div>
+  </div>
+
+  <div class="piece" id="graveyard-shuffle" style="--accent: var(--amber)">
+    <div class="piece-head">
+      <div class="piece-title">Graveyard Shuffle <span style="opacity:0.55; font-weight:400; font-size: 1rem;">— chorus only</span></div>
+      <div style="display:flex; align-items:center; gap:14px;">
+        <div class="piece-genre">electro house</div>
+        <a class="listen-link" href="https://youtu.be/oM7EvjeHuuc?si=uyMXm-P14IoBDaMy" target="_blank">Listen ↗</a>
+      </div>
+    </div>
+    <p class="piece-note">A Halloween club chant — tight AABB rhyme, no hedging, fully committed to the bit. Written solo; the verses were AI-generated and edited, but this hook is start-to-finish original.</p>
+    <div class="lyrics">
+<span class="section-tag">Chorus</span>
+Run and hide and lock your doors
+We'll creep in slowly through your floors
+Rip and tear and steal your souls
+And drag you back to hell with us
+
+Run and hide and lock your doors
+We'll creep in closer, beg for more
+Rip and tear and steal your souls
+And drag you back to hell with us
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="wrap" style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+    <span>© 2026 Pocket Ghost</span>
+    <svg class="ghost-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20 4C11.7 4 5 10.7 5 19v14.5c0 .9 1 1.4 1.7.8l2.6-2.3c.5-.4 1.2-.4 1.6.1l2.3 2.5c.4.5 1.2.5 1.6 0l2.3-2.5c.5-.5 1.2-.5 1.6 0l2.3 2.5c.4.5 1.2.5 1.6 0l2.3-2.5c.4-.5 1.1-.5 1.6-.1l2.6 2.3c.7.6 1.7.1 1.7-.8V19c0-8.3-6.7-15-15-15Z" fill="currentColor"/>
+    </svg>
+  </div>
+</footer>
+
+</body>
+</html>

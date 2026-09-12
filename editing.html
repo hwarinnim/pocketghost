@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Before / After — Pocket Ghost</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --paper: #F5F0E6;
+    --ink: #1A1A1A;
+    --charcoal: #2B2E28;
+    --amber: #C77B3F;
+    --moss: #3D4A3E;
+    --mirror: #7A8B99;
+    --line: rgba(26,26,26,0.14);
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, .display {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+
+  a { color: inherit; }
+
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* ---------- Ghost mark ---------- */
+  .ghost-mark {
+    width: 34px;
+    height: 34px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  /* ---------- Header ---------- */
+  header {
+    padding: 28px 0 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 20px;
+  }
+  .wordmark {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 19px;
+    font-weight: 600;
+  }
+  nav {
+    display: flex;
+    gap: 22px;
+    font-size: 15px;
+  }
+  nav a { text-decoration: none; opacity: 0.7; }
+  nav a:hover { opacity: 1; }
+  nav a.current { opacity: 1; border-bottom: 1px solid var(--ink); }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    padding: 72px 0 56px;
+  }
+  .hero .eyebrow-note {
+    font-size: 15px;
+    color: var(--moss);
+    margin-bottom: 18px;
+    max-width: 46ch;
+  }
+  .hero h1 {
+    font-size: clamp(2.1rem, 5vw, 3.1rem);
+    line-height: 1.08;
+    max-width: 14ch;
+  }
+  .hero .sub {
+    margin-top: 22px;
+    max-width: 54ch;
+    font-size: 18px;
+    color: var(--charcoal);
+  }
+  .hero .provenance-note {
+    margin-top: 26px;
+    padding: 16px 18px;
+    background: rgba(122,139,153,0.12);
+    border-left: 3px solid var(--mirror);
+    font-size: 15px;
+    max-width: 54ch;
+  }
+
+  /* ---------- Section shell ---------- */
+  section {
+    padding: 56px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  section:last-of-type { border-bottom: none; }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 8px;
+  }
+  .section-head h2 {
+    font-size: 1.5rem;
+  }
+  .section-num {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    color: var(--accent, var(--moss));
+    font-size: 1.1rem;
+  }
+  .section-desc {
+    max-width: 56ch;
+    color: var(--charcoal);
+    margin-bottom: 32px;
+    font-size: 16px;
+  }
+
+  /* ---------- Track listing (solo written) ---------- */
+  .track {
+    display: grid;
+    grid-template-columns: 2ch 1fr auto;
+    gap: 18px;
+    align-items: start;
+    padding: 20px 0;
+    border-top: 1px solid var(--line);
+  }
+  .track:first-of-type { border-top: none; }
+  .track-idx {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    color: var(--accent, var(--amber));
+    font-size: 15px;
+    padding-top: 2px;
+  }
+  .track-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.15rem;
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+  .track-title a, .diff-title a, .piece-title a {
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    transition: border-color 0.15s;
+  }
+  .track-title a:hover, .diff-title a:hover, .piece-title a:hover {
+    border-color: var(--ink);
+  }
+  .track-tag {
+    font-size: 14.5px;
+    color: var(--charcoal);
+    line-height: 1.55;
+  }
+  .track-genre {
+    font-size: 13px;
+    color: var(--accent, var(--moss));
+    white-space: nowrap;
+    padding-top: 3px;
+    text-align: right;
+  }
+
+  /* ---------- Before / After ---------- */
+  .diff-card {
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 24px;
+    margin-bottom: 22px;
+    background: rgba(255,255,255,0.35);
+  }
+  .diff-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+  }
+  .diff-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.1rem;
+  }
+  .diff-skill {
+    font-size: 13px;
+    color: var(--accent, var(--amber));
+  }
+  .diff-note {
+    font-size: 15px;
+    color: var(--charcoal);
+    margin: 10px 0 16px;
+  }
+  .diff-lines { display: grid; gap: 8px; }
+  .diff-line {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    font-size: 14.5px;
+    padding: 10px 0;
+    border-top: 1px dashed var(--line);
+  }
+  .diff-line:first-child { border-top: none; }
+  .diff-before { color: #8a7a6a; text-decoration: line-through; text-decoration-color: rgba(199,123,63,0.5); }
+  .diff-after { color: var(--ink); font-weight: 500; }
+  .diff-label {
+    font-size: 11px;
+    text-transform: lowercase;
+    color: var(--charcoal);
+    opacity: 0.55;
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  /* ---------- Channel band ---------- */
+  .channel-band {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    padding: 30px;
+    background: var(--charcoal);
+    color: var(--paper);
+    border-radius: 4px;
+  }
+  .channel-band .ghost-mark path { fill: var(--paper); }
+  .channel-stats {
+    font-family: 'Fraunces', serif;
+    font-size: 2rem;
+    line-height: 1;
+  }
+  .channel-stats span {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    opacity: 0.65;
+    margin-top: 4px;
+  }
+  .channel-copy { flex: 1; font-size: 15px; opacity: 0.9; }
+  .channel-link {
+    text-decoration: none;
+    border: 1px solid rgba(245,240,230,0.4);
+    padding: 9px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  .channel-link:hover { background: rgba(245,240,230,0.1); }
+
+  .genre-tags {
+    margin-top: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .genre-tag {
+    font-size: 12.5px;
+    padding: 5px 11px;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    color: var(--charcoal);
+  }
+
+  /* ---------- Footer ---------- */
+  footer {
+    padding: 40px 0 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    color: var(--charcoal);
+  }
+  footer .ghost-mark { width: 22px; height: 22px; opacity: 0.5; }
+
+  @media (max-width: 600px) {
+    .track { grid-template-columns: 1.5ch 1fr; }
+    .track-genre { grid-column: 2; text-align: left; padding-top: 0; }
+    .diff-line { grid-template-columns: 1fr; gap: 4px; }
+    .channel-band { flex-direction: column; align-items: flex-start; }
+  }
+
+/* ---------- Subpage additions ---------- */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--charcoal);
+  text-decoration: none;
+  margin-bottom: 8px;
+}
+.back-link:hover { color: var(--ink); }
+
+.page-hero {
+  padding: 44px 0 40px;
+}
+.page-hero h1 {
+  font-size: clamp(1.8rem, 4.5vw, 2.4rem);
+  margin-top: 10px;
+}
+.page-hero .sub {
+  margin-top: 16px;
+  max-width: 58ch;
+  font-size: 17px;
+  color: var(--charcoal);
+}
+
+.piece {
+  padding: 48px 0;
+  border-top: 1px solid var(--line);
+}
+.piece:first-of-type { border-top: none; padding-top: 8px; }
+
+.piece-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.piece-title {
+  font-family: 'Fraunces', serif;
+  font-size: 1.5rem;
+}
+.piece-genre {
+  font-size: 13px;
+  color: var(--accent, var(--amber));
+}
+.piece-note {
+  font-size: 15.5px;
+  color: var(--charcoal);
+  max-width: 60ch;
+  margin: 10px 0 26px;
+}
+
+.lyrics {
+  white-space: pre-line;
+  font-family: 'Fraunces', serif;
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--ink);
+  max-width: 56ch;
+}
+.lyrics .section-tag {
+  font-family: 'Inter', sans-serif;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--accent, var(--moss));
+  opacity: 0.75;
+  display: block;
+  margin: 22px 0 4px;
+}
+.lyrics .section-tag:first-child { margin-top: 0; }
+
+/* full before/after comparison layout */
+.compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  align-items: start;
+}
+.compare-col-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--charcoal);
+  opacity: 0.6;
+  margin-bottom: 10px;
+  display: block;
+}
+.compare .lyrics { font-size: 15px; }
+.compare-before .lyrics { color: #8a7a6a; }
+
+@media (max-width: 700px) {
+  .compare { grid-template-columns: 1fr; }
+}
+
+
+.listen-link {
+  font-size: 13px;
+  color: var(--accent, var(--amber));
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  white-space: nowrap;
+}
+.listen-link:hover { opacity: 0.7; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap header-row">
+    <a href="index.html" class="wordmark" style="text-decoration:none; color:inherit;">
+      <svg class="ghost-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 4C11.7 4 5 10.7 5 19v14.5c0 .9 1 1.4 1.7.8l2.6-2.3c.5-.4 1.2-.4 1.6.1l2.3 2.5c.4.5 1.2.5 1.6 0l2.3-2.5c.5-.5 1.2-.5 1.6 0l2.3 2.5c.4.5 1.2.5 1.6 0l2.3-2.5c.4-.5 1.1-.5 1.6-.1l2.6 2.3c.7.6 1.7.1 1.7-.8V19c0-8.3-6.7-15-15-15Z" fill="#1A1A1A"/>
+        <ellipse cx="15" cy="18" rx="1.8" ry="2.4" fill="#F5F0E6"/>
+        <ellipse cx="25" cy="18" rx="1.8" ry="2.4" fill="#F5F0E6"/>
+      </svg>
+      Pocket Ghost
+    </a>
+    <nav>
+      <a href="writing.html">Writing</a>
+      <a href="editing.html" class="current">Editing</a>
+      <a href="http://www.youtube.com/@PocketGhostMusic" target="_blank">Channel</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="page-hero">
+    <a class="back-link" href="index.html">← back</a>
+    <h1>Before / after</h1>
+    <p class="sub">Five songs that started as an AI-generated first pass, shown next to what actually shipped. Full lyrics, side by side — not just the highlight lines.</p>
+  </div>
+
+  <div class="piece" id="please-take-care-of-her" style="--accent: var(--moss)">
+    <div class="piece-head">
+      <div class="piece-title">Please Take Care of Her</div>
+      <div style="display:flex; align-items:center; gap:14px;">
+        <div class="piece-genre">emotional tightening</div>
+        <a class="listen-link" href="https://youtu.be/po14cqPycgM?si=OwvuqYyA8p6lLsI_" target="_blank">Listen ↗</a>
+      </div>
+    </div>
+    <p class="piece-note">Every chorus in the draft explained the feeling with an extra clause. The edit cuts the explanation and keeps the action — the same move, made on purpose, three times running.</p>
+    <div class="compare">
+      <div class="compare-before">
+        <span class="compare-col-label">draft</span>
+        <div class="lyrics">Please take care of her
+Better than I knew how to do
+Love her gentle
+Love her slower
+Than I ever let myself learn to
+You're the one who gets tomorrow
+I just get this last request to you
+Please take care of her
+The way I never knew
+
+—
+
+Please take care of her
+Better than I knew how to do
+Love her tender
+Love her softer
+Than my restless heart could ever prove
+You're the one who gets forever
+I just get these borrowed words to you
+Please take care of her
+The way I never knew
+
+—
+
+Please take care of her
+Better than I knew how to do
+Hold her steady when she's shaking
+When she's strong
+Stand back and let her move
+You're the one who gets to keep her
+I'm the one who had to learn the truth
+Please take care of her
+The way I couldn't do</div>
+      </div>
+      <div class="compare-after">
+        <span class="compare-col-label">final</span>
+        <div class="lyrics">Please take care of her
+Better than I knew how to do
+Love her gentle
+Love her slow
+You're the one who gets tomorrow
+So I'm begging you
+Please take care of her
+
+—
+
+Please take care of her
+Better than I knew how to do
+Love her tender
+Love her soft
+You're the one who gets forever
+So I'm begging you
+Please take care of her
+
+—
+
+Please take care of her
+Better than I knew how to do
+Hold her steady
+Hold her tight
+You're the one who gets to love her
+So I'm begging you
+Please take care of her</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="piece" id="move-on" style="--accent: var(--moss)">
+    <div class="piece-head">
+      <div class="piece-title">Move On</div>
+      <div style="display:flex; align-items:center; gap:14px;">
+        <div class="piece-genre">structural rearrangement</div>
+        <a class="listen-link" href="https://youtu.be/GiecebfnnN0?si=rLr7cpIxivsOXEgX" target="_blank">Listen ↗</a>
+      </div>
+    </div>
+    <p class="piece-note">The hook was front-loaded with nowhere to build to. Reordered the chorus so it lands last, then wrote an entirely new instrumental-break chant that didn't exist in the draft.</p>
+    <div class="compare">
+      <div class="compare-before">
+        <span class="compare-col-label">draft</span>
+        <div class="lyrics">(Verse 1)
+Stepped out tonight, feeling light
+Got this new dress, shining bright
+Used to think I needed you near
+But look at me, no trace of a tear
+
+(Chorus)
+Time for you to move on, yeah
+My dance floor's open, no more fear
+Got my own rhythm, loud and clear
+Someone else can have that seat, my dear
+
+(Verse 2)
+The beat drops low, the lights are sweet
+Moving my body to my own feet
+Used to call you up, what a mess
+Now I just dance, feeling blessed
+
+(Chorus — repeats)
+
+(Bridge)
+No hard feelings, just a simple truth
+This freedom feels like a second youth
+Didn't know what I was missing then
+But I'm not going back, not ever again
+
+(Chorus — repeats)
+
+(Outro)
+Oh, I'm feeling so much better without you
+Yeah, so much better, it's true
+Move on, move on, that's what I do
+Dancing into a brand new view</div>
+      </div>
+      <div class="compare-after">
+        <span class="compare-col-label">final</span>
+        <div class="lyrics">(Intro: whispered, hype vocal tag)
+Pocket Ghost
+
+(Verse 1 — unchanged)
+
+(Chorus)
+My dance floor's open, no more fear
+Got my own rhythm, loud and clear
+Someone else can have that seat, my dear
+Time for you to move on
+
+(Instrumental dance break)
+Move on
+Move on
+Move on
+Time for you to move on
+
+(Verse 2 — unchanged)
+
+(Chorus — repeats)
+(Instrumental dance break — repeats)
+
+(Bridge)
+No hard feelings, just a simple truth
+This freedom feels like a brand new world
+Didn't know what I was missing then
+But I'm not going back, not ever again
+
+(Chorus — repeats)
+
+(Outro)
+Move on
+Move on
+Move on
+Time for you to move on</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="piece" id="the-dating-game" style="--accent: var(--moss)">
+    <div class="piece-head">
+      <div class="piece-title">The Dating Game</div>
+      <div style="display:flex; align-items:center; gap:14px;">
+        <div class="piece-genre">comic timing &amp; judgment</div>
+        <a class="listen-link" href="https://youtu.be/qEXXJBzUauQ?si=yoWHz88YnNeOQY7D" target="_blank">Listen ↗</a>
+      </div>
+    </div>
+    <p class="piece-note">Tightened punchlines by cutting the explanation that followed each joke, and generalized one verse's nationality-specific detail into something universal — same laugh, without a joke made at a real country's expense.</p>
+    <div class="compare">
+      <div class="compare-before">
+        <span class="compare-col-label">draft</span>
+        <div class="lyrics">[Verse 1]
+Swiped right on a smile, a pretty face, thought "maybe this time"
+Got a message back, just "hey," no mention of my carefully crafted rhyme
+My bio's a novel, a comedic masterpiece, a hint of my soul
+But he's asking if I like dogs, like he never scrolled
+
+[Chorus]
+Oh, the dating game, a wild, wild ride, a circus of confusion
+One minute you're hopeful, the next, pure disillusion
+But my heart keeps bouncing, a trot beat in my chest
+Gotta find my partner, put this whole charade to the test
+
+[Verse 2]
+Met a guy last week, seemed sweet, we talked for an hour or two
+Then he drops a bombshell, "wanna fly to India, get married, just me and you?"
+(Spoken: Sir, we just met. Do you even know my last name?)
+Another one messaged, "I'm in Busan, meet me halfway, I'll pay for your train"
+(Spoken: Halfway from Busan? Are you serious? I live in Seoul!)
+Said he wanted serious, long-term, forever and a day
+Then mentioned his visa expires, he's leaving for good in May
+
+[Spoken Interlude]
+Friend: "Ugh, my date smelled like old kimchi and regret."
+Me: (Deadpan) "Make it another girl's problem."
+
+[Outro]
+So here we are, us single souls, a little bruised, a little frayed
+But still, somewhere out there, a real connection's being made
+Let's gather 'round, share our stories, laugh until we cry
+And maybe, just maybe, our perfect person will walk by.
+(Spoken: Or at least someone who reads a bio.)</div>
+      </div>
+      <div class="compare-after">
+        <span class="compare-col-label">final</span>
+        <div class="lyrics">[Verse 1]
+Swiped right on a smile, a pretty face, thought "maybe this time"
+Got a message back, just "hey," no mention of my carefully crafted rhyme
+My bio's a novel, a comedic masterpiece, a hint of my soul
+But he's asking if I like movies, like he never scrolled
+
+[Chorus]
+Oh, the dating game, a wild, wild ride
+A circus of confusion and pure disillusion
+But my heart keeps bouncing in my chest
+Gotta find my love, wherever he may be
+
+[Verse 2]
+Met a guy last week, seemed sweet, we talked for an hour or two
+Then he drops a bombshell, "wanna fly to my country, get married, just me and you?"
+(Sir, we just met.)
+Another one messaged, "I'm in Busan, when can you come visit?"
+(Are you serious? I live in Seoul.)
+
+[Pre-chorus]
+"Like, what's with all the fishing? And the boats?"
+"And the toothpicks, and babies with no explanation."
+
+[Outro]
+So here we are, we're all that's left
+A little bruised, a little frayed
+But still, somewhere out there I will eventually find
+Someone who can read for once</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="piece" id="what-disappears" style="--accent: var(--moss)">
+    <div class="piece-head">
+      <div class="piece-title">What Disappears</div>
+      <div style="display:flex; align-items:center; gap:14px;">
+        <div class="piece-genre">specificity &amp; embodiment</div>
+        <a class="listen-link" href="https://youtu.be/B6rr6UCa-FE?si=hL5k_YqgvcMDmqQX" target="_blank">Listen ↗</a>
+      </div>
+    </div>
+    <p class="piece-note">Traded vague, safe phrasing for concrete, physical language — edited by ear, out loud, catching what didn't feel true and fixing it. The parentheses in the chorus were added as a production cue, not just a lyric choice: they tell Suno to treat those lines as background/ad-lib rather than a doubled lead vocal.</p>
+    <div class="compare">
+      <div class="compare-before">
+        <span class="compare-col-label">draft (key lines)</span>
+        <div class="lyrics">...
+Standing there, in socks
+...
+Then I blink once
+And the whole month moved
+...
+But the same four walls
+Keep learning my name
+...
+Same few texts
+Same few calls
+...
+I know my worth
+When the room goes quiet
+I know what I won't eat
+Just to keep the peace alive
+...
+Now I say no
+And mean my name
+...
+What I allow
+What I outgrow
+What I let near
+What I let go</div>
+      </div>
+      <div class="compare-after">
+        <span class="compare-col-label">final (key lines)</span>
+        <div class="lyrics">...
+Standing there, cold feet
+...
+Then I blink once
+And the whole season moved
+...
+But the same four walls
+Keep whispering my name
+...
+Same few places
+Same few people
+...
+I know my price
+When the room goes quiet
+I know what I won't swallow
+Just to keep the peace alive
+...
+Now I say no
+And mean it full stop
+...
+What I let in
+What I outgrow
+What I let near
+What I let go</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="piece" id="miles-and-magnets" style="--accent: var(--moss)">
+    <div class="piece-head">
+      <div class="piece-title">Miles and Magnets</div>
+      <div style="display:flex; align-items:center; gap:14px;">
+        <div class="piece-genre">personal specificity</div>
+        <a class="listen-link" href="https://youtu.be/xVNlknipYWU?si=062bXDCGzLxV-Jqg" target="_blank">Listen ↗</a>
+      </div>
+    </div>
+    <p class="piece-note">Swapped generic imagery for details specifically true to a life lived in Seoul — including a small wink at the writer's own studio name hidden in the lyric.</p>
+    <div class="compare">
+      <div class="compare-before">
+        <span class="compare-col-label">draft (key lines)</span>
+        <div class="lyrics">I've seen enough roads
+To know the shape of a face
+Every airport hallway
+Feels like the same old place
+...
+I wanna stay right here
+Where my people live
+I wanna stay right here
+This city's what I give
+...
+I love my own pillow
+The one with the dent
+The quiet in my bedroom
+Like money well spent
+...
+I keep my little home
+...
+I'll keep my front door key</div>
+      </div>
+      <div class="compare-after">
+        <span class="compare-col-label">final (key lines)</span>
+        <div class="lyrics">I've seen enough roads
+To know the shape of a city
+Every airport hallway
+Feels like the same old walls
+...
+I wanna stay right here
+Where my people live
+I wanna stay right here
+This city's what I miss
+...
+I love my own pillow
+The one with the dent
+The quiet in my bedroom
+After all, I paid rent
+...
+I keep my little shoebox
+...
+I'll keep my front door code</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="wrap" style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+    <span>© 2026 Pocket Ghost</span>
+    <svg class="ghost-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20 4C11.7 4 5 10.7 5 19v14.5c0 .9 1 1.4 1.7.8l2.6-2.3c.5-.4 1.2-.4 1.6.1l2.3 2.5c.4.5 1.2.5 1.6 0l2.3-2.5c.5-.5 1.2-.5 1.6 0l2.3 2.5c.4.5 1.2.5 1.6 0l2.3-2.5c.4-.5 1.1-.5 1.6-.1l2.6 2.3c.7.6 1.7.1 1.7-.8V19c0-8.3-6.7-15-15-15Z" fill="currentColor"/>
+    </svg>
+  </div>
+</footer>
+
+</body>
+</html>
