@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pocket Ghost — Songwriter &amp; Lyricist</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --paper: #F5F0E6;
+    --ink: #1A1A1A;
+    --charcoal: #2B2E28;
+    --amber: #C77B3F;
+    --moss: #3D4A3E;
+    --mirror: #7A8B99;
+    --line: rgba(26,26,26,0.14);
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, .display {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+
+  a { color: inherit; }
+
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* ---------- Ghost mark ---------- */
+  .ghost-mark {
+    width: 34px;
+    height: 34px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  /* ---------- Header ---------- */
+  header {
+    padding: 28px 0 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 20px;
+  }
+  .wordmark {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 19px;
+    font-weight: 600;
+  }
+  nav {
+    display: flex;
+    gap: 22px;
+    font-size: 15px;
+  }
+  nav a { text-decoration: none; opacity: 0.7; }
+  nav a:hover { opacity: 1; }
+  nav a.current { opacity: 1; border-bottom: 1px solid var(--ink); }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    padding: 72px 0 56px;
+  }
+  .hero .eyebrow-note {
+    font-size: 15px;
+    color: var(--moss);
+    margin-bottom: 18px;
+    max-width: 46ch;
+  }
+  .hero h1 {
+    font-size: clamp(2.1rem, 5vw, 3.1rem);
+    line-height: 1.08;
+    max-width: 14ch;
+  }
+  .hero .sub {
+    margin-top: 22px;
+    max-width: 54ch;
+    font-size: 18px;
+    color: var(--charcoal);
+  }
+  .hero .provenance-note {
+    margin-top: 26px;
+    padding: 16px 18px;
+    background: rgba(122,139,153,0.12);
+    border-left: 3px solid var(--mirror);
+    font-size: 15px;
+    max-width: 54ch;
+  }
+
+  /* ---------- Section shell ---------- */
+  section {
+    padding: 56px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  section:last-of-type { border-bottom: none; }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 8px;
+  }
+  .section-head h2 {
+    font-size: 1.5rem;
+  }
+  .section-num {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    color: var(--accent, var(--moss));
+    font-size: 1.1rem;
+  }
+  .section-desc {
+    max-width: 56ch;
+    color: var(--charcoal);
+    margin-bottom: 32px;
+    font-size: 16px;
+  }
+
+  /* ---------- Track listing (solo written) ---------- */
+  .track {
+    display: grid;
+    grid-template-columns: 2ch 1fr auto;
+    gap: 18px;
+    align-items: start;
+    padding: 20px 0;
+    border-top: 1px solid var(--line);
+  }
+  .track:first-of-type { border-top: none; }
+  .track-idx {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    color: var(--accent, var(--amber));
+    font-size: 15px;
+    padding-top: 2px;
+  }
+  .track-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.15rem;
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+  .track-title a, .diff-title a, .piece-title a {
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    transition: border-color 0.15s;
+  }
+  .track-title a:hover, .diff-title a:hover, .piece-title a:hover {
+    border-color: var(--ink);
+  }
+  .track-tag {
+    font-size: 14.5px;
+    color: var(--charcoal);
+    line-height: 1.55;
+  }
+  .track-genre {
+    font-size: 13px;
+    color: var(--accent, var(--moss));
+    white-space: nowrap;
+    padding-top: 3px;
+    text-align: right;
+  }
+
+  /* ---------- Before / After ---------- */
+  .diff-card {
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 24px;
+    margin-bottom: 22px;
+    background: rgba(255,255,255,0.35);
+  }
+  .diff-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+  }
+  .diff-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.1rem;
+  }
+  .diff-skill {
+    font-size: 13px;
+    color: var(--accent, var(--amber));
+  }
+  .diff-note {
+    font-size: 15px;
+    color: var(--charcoal);
+    margin: 10px 0 16px;
+  }
+  .diff-lines { display: grid; gap: 8px; }
+  .diff-line {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    font-size: 14.5px;
+    padding: 10px 0;
+    border-top: 1px dashed var(--line);
+  }
+  .diff-line:first-child { border-top: none; }
+  .diff-before { color: #8a7a6a; text-decoration: line-through; text-decoration-color: rgba(199,123,63,0.5); }
+  .diff-after { color: var(--ink); font-weight: 500; }
+  .diff-label {
+    font-size: 11px;
+    text-transform: lowercase;
+    color: var(--charcoal);
+    opacity: 0.55;
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  /* ---------- Channel band ---------- */
+  .channel-band {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    padding: 30px;
+    background: var(--charcoal);
+    color: var(--paper);
+    border-radius: 4px;
+  }
+  .channel-band .ghost-mark path { fill: var(--paper); }
+  .channel-stats {
+    font-family: 'Fraunces', serif;
+    font-size: 2rem;
+    line-height: 1;
+  }
+  .channel-stats span {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    opacity: 0.65;
+    margin-top: 4px;
+  }
+  .channel-copy { flex: 1; font-size: 15px; opacity: 0.9; }
+  .channel-link {
+    text-decoration: none;
+    border: 1px solid rgba(245,240,230,0.4);
+    padding: 9px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  .channel-link:hover { background: rgba(245,240,230,0.1); }
+
+  .genre-tags {
+    margin-top: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .genre-tag {
+    font-size: 12.5px;
+    padding: 5px 11px;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    color: var(--charcoal);
+  }
+
+  /* ---------- Footer ---------- */
+  footer {
+    padding: 40px 0 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    color: var(--charcoal);
+  }
+  footer .ghost-mark { width: 22px; height: 22px; opacity: 0.5; }
+
+  @media (max-width: 600px) {
+    .track { grid-template-columns: 1.5ch 1fr; }
+    .track-genre { grid-column: 2; text-align: left; padding-top: 0; }
+    .diff-line { grid-template-columns: 1fr; gap: 4px; }
+    .channel-band { flex-direction: column; align-items: flex-start; }
+  }
+
+/* ---------- Subpage additions ---------- */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--charcoal);
+  text-decoration: none;
+  margin-bottom: 8px;
+}
+.back-link:hover { color: var(--ink); }
+
+.page-hero {
+  padding: 44px 0 40px;
+}
+.page-hero h1 {
+  font-size: clamp(1.8rem, 4.5vw, 2.4rem);
+  margin-top: 10px;
+}
+.page-hero .sub {
+  margin-top: 16px;
+  max-width: 58ch;
+  font-size: 17px;
+  color: var(--charcoal);
+}
+
+.piece {
+  padding: 48px 0;
+  border-top: 1px solid var(--line);
+}
+.piece:first-of-type { border-top: none; padding-top: 8px; }
+
+.piece-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.piece-title {
+  font-family: 'Fraunces', serif;
+  font-size: 1.5rem;
+}
+.piece-genre {
+  font-size: 13px;
+  color: var(--accent, var(--amber));
+}
+.piece-note {
+  font-size: 15.5px;
+  color: var(--charcoal);
+  max-width: 60ch;
+  margin: 10px 0 26px;
+}
+
+.lyrics {
+  white-space: pre-line;
+  font-family: 'Fraunces', serif;
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--ink);
+  max-width: 56ch;
+}
+.lyrics .section-tag {
+  font-family: 'Inter', sans-serif;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--accent, var(--moss));
+  opacity: 0.75;
+  display: block;
+  margin: 22px 0 4px;
+}
+.lyrics .section-tag:first-child { margin-top: 0; }
+
+/* full before/after comparison layout */
+.compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  align-items: start;
+}
+.compare-col-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--charcoal);
+  opacity: 0.6;
+  margin-bottom: 10px;
+  display: block;
+}
+.compare .lyrics { font-size: 15px; }
+.compare-before .lyrics { color: #8a7a6a; }
+
+@media (max-width: 700px) {
+  .compare { grid-template-columns: 1fr; }
+}
+
+
+.listen-link {
+  font-size: 13px;
+  color: var(--accent, var(--amber));
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  white-space: nowrap;
+}
+.listen-link:hover { opacity: 0.7; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap header-row">
+    <a href="index.html" class="wordmark" style="text-decoration:none; color:inherit;">
+      <svg class="ghost-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 4C11.7 4 5 10.7 5 19v14.5c0 .9 1 1.4 1.7.8l2.6-2.3c.5-.4 1.2-.4 1.6.1l2.3 2.5c.4.5 1.2.5 1.6 0l2.3-2.5c.5-.5 1.2-.5 1.6 0l2.3 2.5c.4.5 1.2.5 1.6 0l2.3-2.5c.4-.5 1.1-.5 1.6-.1l2.6 2.3c.7.6 1.7.1 1.7-.8V19c0-8.3-6.7-15-15-15Z" fill="#1A1A1A"/>
+        <ellipse cx="15" cy="18" rx="1.8" ry="2.4" fill="#F5F0E6"/>
+        <ellipse cx="25" cy="18" rx="1.8" ry="2.4" fill="#F5F0E6"/>
+      </svg>
+      Pocket Ghost
+    </a>
+    <nav>
+      <a href="writing.html">Writing</a>
+      <a href="editing.html">Editing</a>
+      <a href="http://www.youtube.com/@PocketGhostMusic" target="_blank">Channel</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="hero">
+    <div class="eyebrow-note">Songwriter &amp; lyricist, Seoul</div>
+    <h1>Words that hold up<br>whatever genre<br>you drop them in.</h1>
+    <p class="sub">I write and edit lyrics across genre, mood, and language — from a blank page or a rough draft. Some of what's below is written solo, start to finish; some began as an AI-generated first pass that I rewrote into its final shape. Both are labeled honestly.</p>
+  </section>
+
+  <section id="writing">
+    <div class="section-head" style="--accent: var(--amber)">
+      <span class="section-num">01</span>
+      <h2>Written solo</h2>
+    </div>
+    <p class="section-desc">Concept, structure, and every line — no generated draft involved. Seven pieces, seven different jobs.</p>
+
+    <div class="track" style="--accent: var(--amber)">
+      <div class="track-idx">a</div>
+      <div>
+        <div class="track-title"><a href="writing.html#dust">Dust</a></div>
+        <div class="track-tag">A breakup song built on a chain-link device — each line ends on a word the next line immediately repeats, mirroring a thought that catches and can't move on.</div>
+      </div>
+      <div class="track-genre">alt R&amp;B / electropop</div>
+    </div>
+  <div class="track" style="--accent: var(--amber)">
+      <div class="track-idx">b</div>
+      <div>
+        <div class="track-title"><a href="writing.html#story-of-a-knight">The Story of a Knight</a></div>
+        <div class="track-tag">A narrative folk ballad about a knight's sacrifice, written in thirty minutes with a frame device that bookends the whole story — knight becomes king, title never gives it away.</div>
+      </div>
+      <div class="track-genre">medieval folk</div>
+    </div>
+
+    <div class="track" style="--accent: var(--amber)">
+      <div class="track-idx">c</div>
+      <div>
+        <div class="track-title"><a href="writing.html#i-know-i-know">I Know I Know</a></div>
+        <div class="track-tag">A heartbreak track where the chorus repeats near word-for-word three times — except one line shifts each pass: <em>Maybe → Waiting → Goodbye</em>, quietly tracking the whole arc.</div>
+      </div>
+      <div class="track-genre">city pop / tropicália</div>
+    </div>
+
+    <div class="track" style="--accent: var(--amber)">
+      <div class="track-idx">d</div>
+      <div>
+        <div class="track-title"><a href="writing.html#die-alone">Die Alone</a></div>
+        <div class="track-tag">A bright Motown-leaning song hiding its bleakest turn inside its most cheerful device — a wordless "lalala" refrain that swallows the darkest line right back into the singalong.</div>
+      </div>
+      <div class="track-genre">blue-eyed soul / neo soul</div>
+    </div>
+
+    <div class="track" style="--accent: var(--amber)">
+      <div class="track-idx">e</div>
+      <div>
+        <div class="track-title"><a href="writing.html#next-to-me">Next to Me</a></div>
+        <div class="track-tag">A plain, unguarded love song built on one repeating device: the same chorus, one word changing each time — <em>eyes, hands, lips</em> — tracking intimacy without ever stating it outright.</div>
+      </div>
+      <div class="track-genre">jazz pop / swing</div>
+    </div>
+
+    <div class="track" style="--accent: var(--amber)">
+      <div class="track-idx">f</div>
+      <div>
+        <div class="track-title"><a href="writing.html#work">Work</a></div>
+        <div class="track-tag">Satirical hustle-culture anthem built as a self-interrogation — a monotone voice asking, in call-and-response, whether you're still being productive. Structure and delivery both do the joke.</div>
+      </div>
+      <div class="track-genre">hypnotic techno</div>
+    </div>
+
+    <div class="track" style="--accent: var(--amber)">
+      <div class="track-idx">g</div>
+      <div>
+        <div class="track-title"><a href="writing.html#graveyard-shuffle">Graveyard Shuffle</a> <span style="opacity:0.6; font-weight:400;">— chorus</span></div>
+        <div class="track-tag">A full-commitment Halloween club chant, tight AABB rhyme, no hedging: <em>"Run and hide and lock your doors / we'll creep in slowly through your floors."</em></div>
+      </div>
+      <div class="track-genre">electro house</div>
+    </div>
+
+    </section>
+
+  <section id="editing">
+    <div class="section-head" style="--accent: var(--moss)">
+      <span class="section-num">02</span>
+      <h2>Before / after</h2>
+    </div>
+    <p class="section-desc">Starting from an AI-generated first pass and rewriting it into what actually shipped. Five different editorial instincts, side by side.</p>
+
+    <div class="diff-card">
+      <div class="diff-head">
+        <div class="diff-title"><a href="editing.html#please-take-care-of-her">Please Take Care of Her</a></div>
+        <div class="diff-skill">emotional tightening</div>
+      </div>
+      <p class="diff-note">Every chorus in the draft explained the feeling in an extra clause. The edit cuts the explanation and keeps the action — the same move, repeated on purpose, three times.</p>
+      <div class="diff-lines">
+        <div class="diff-line"><div><span class="diff-label">draft</span><span class="diff-before">Love her gentle / Love her slower / Than I ever let myself learn to</span></div><div><span class="diff-label">final</span><span class="diff-after">Love her gentle / Love her slow</span></div></div>
+        <div class="diff-line"><div><span class="diff-before">Hold her steady when she's shaking / When she's strong stand back and let her move</span></div><div><span class="diff-after">Hold her steady / Hold her tight</span></div></div>
+      </div>
+    </div>
+
+    <div class="diff-card">
+      <div class="diff-head">
+        <div class="diff-title"><a href="editing.html#move-on">Move On</a></div>
+        <div class="diff-skill">structural rearrangement</div>
+      </div>
+      <p class="diff-note">The hook was front-loaded and had nowhere to go. Moved it to the end of the chorus, then built an entirely new instrumental-break chant that didn't exist in the draft.</p>
+      <div class="diff-lines">
+        <div class="diff-line"><div><span class="diff-label">draft</span><span class="diff-before">Time for you to move on, yeah / My dance floor's open, no more fear...</span></div><div><span class="diff-label">final</span><span class="diff-after">My dance floor's open, no more fear... / Time for you to move on</span></div></div>
+        <div class="diff-line"><div><span class="diff-before">(no equivalent section)</span></div><div><span class="diff-after">Move on / Move on / Move on / Time for you to move on</span></div></div>
+      </div>
+    </div>
+
+    <div class="diff-card">
+      <div class="diff-head">
+        <div class="diff-title"><a href="editing.html#the-dating-game">The Dating Game</a></div>
+        <div class="diff-skill">comic timing &amp; judgment</div>
+      </div>
+      <p class="diff-note">Tightened punchlines by cutting the explanation after the joke — and generalized one verse's nationality-specific joke into something universal, without losing the laugh.</p>
+      <div class="diff-lines">
+        <div class="diff-line"><div><span class="diff-label">draft</span><span class="diff-before">wanna fly to India, get married, just me and you?</span></div><div><span class="diff-label">final</span><span class="diff-after">wanna fly to my country, get married, just me and you?</span></div></div>
+        <div class="diff-line"><div><span class="diff-before">Sir, we just met. Do you even know my last name?</span></div><div><span class="diff-after">Sir, we just met.</span></div></div>
+      </div>
+    </div>
+
+    <div class="diff-card">
+      <div class="diff-head">
+        <div class="diff-title"><a href="editing.html#what-disappears">What Disappears</a></div>
+        <div class="diff-skill">specificity &amp; embodiment</div>
+      </div>
+      <p class="diff-note">Traded vague, safe phrasing for concrete, physical language throughout — edited by ear, out loud, line by line.</p>
+      <div class="diff-lines">
+        <div class="diff-line"><div><span class="diff-label">draft</span><span class="diff-before">Standing there, in socks</span></div><div><span class="diff-label">final</span><span class="diff-after">Standing there, cold feet</span></div></div>
+        <div class="diff-line"><div><span class="diff-before">I know my worth... I know what I won't eat</span></div><div><span class="diff-after">I know my price... I know what I won't swallow</span></div></div>
+      </div>
+    </div>
+
+    <div class="diff-card">
+      <div class="diff-head">
+        <div class="diff-title"><a href="editing.html#miles-and-magnets">Miles and Magnets</a></div>
+        <div class="diff-skill">personal specificity</div>
+      </div>
+      <p class="diff-note">Swapped generic imagery for details specifically true to a life in Seoul — down to how the front door actually locks.</p>
+      <div class="diff-lines">
+        <div class="diff-line"><div><span class="diff-label">draft</span><span class="diff-before">The quiet in my bedroom / Like money well spent</span></div><div><span class="diff-label">final</span><span class="diff-after">The quiet in my bedroom / After all, I paid rent</span></div></div>
+        <div class="diff-line"><div><span class="diff-before">I'll keep my front door key</span></div><div><span class="diff-after">I'll keep my front door code</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="channel">
+    <div class="section-head" style="--accent: var(--mirror)">
+      <span class="section-num">03</span>
+      <h2>The catalog</h2>
+    </div>
+    <p class="section-desc">Everything above is a sample of the writing. This is the range — proof of finished production across genre, not an authorship claim on every word.</p>
+
+    <div class="channel-band">
+      <div class="channel-stats">50+<span>tracks released</span></div>
+      <div class="channel-stats">40+<span>hand-edited lyrics</span></div>
+      <div class="channel-copy">Folk, city pop, techno, K-indie, gothic classical, Latin pop, medieval ballad, hyperpop, jazz, and more — released as <strong>Pocket Ghost</strong> on YouTube since March 2026.</div>
+      <a class="channel-link" href="http://www.youtube.com/@PocketGhostMusic" target="_blank">Watch →</a>
+    </div>
+
+    <div class="genre-tags">
+      <span class="genre-tag">city pop</span>
+      <span class="genre-tag">hypnotic techno</span>
+      <span class="genre-tag">gothic classical</span>
+      <span class="genre-tag">medieval folk</span>
+      <span class="genre-tag">cumbia</span>
+      <span class="genre-tag">bachata</span>
+      <span class="genre-tag">K-indie</span>
+      <span class="genre-tag">Korean trot</span>
+      <span class="genre-tag">jazz pop</span>
+      <span class="genre-tag">chiptune</span>
+      <span class="genre-tag">chill lofi</span>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="wrap" style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+    <span>© 2026 Pocket Ghost</span>
+    <svg class="ghost-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20 4C11.7 4 5 10.7 5 19v14.5c0 .9 1 1.4 1.7.8l2.6-2.3c.5-.4 1.2-.4 1.6.1l2.3 2.5c.4.5 1.2.5 1.6 0l2.3-2.5c.5-.5 1.2-.5 1.6 0l2.3 2.5c.4.5 1.2.5 1.6 0l2.3-2.5c.4-.5 1.1-.5 1.6-.1l2.6 2.3c.7.6 1.7.1 1.7-.8V19c0-8.3-6.7-15-15-15Z" fill="currentColor"/>
+    </svg>
+  </div>
+</footer>
+
+</body>
+</html>
